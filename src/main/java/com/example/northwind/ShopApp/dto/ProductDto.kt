@@ -1,6 +1,5 @@
 package com.example.northwind.ShopApp.dto
 
-import com.example.northwind.ShopApp.model.Category
 
 data class ProductDto(
     val id : Int,
@@ -8,5 +7,5 @@ data class ProductDto(
     val quantityPerUnit : String,
     val unitPrice :Short,
     val unitsInStock : Short,
-    val category : Category
+    val categoryDto : CategoryDto
 )

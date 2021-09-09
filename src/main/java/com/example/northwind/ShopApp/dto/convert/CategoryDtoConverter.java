@@ -11,19 +11,10 @@ import java.util.stream.Collectors;
 @Component
 public class CategoryDtoConverter {
 
-    private final ProductDtoConverter productDtoConverter;
-
-
-    public CategoryDtoConverter(ProductDtoConverter productDtoConverter) {
-        this.productDtoConverter = productDtoConverter;
-
-    }
-
     public CategoryDto convert(Category from){
         return new CategoryDto(
                 from.getCategoryId(),
                 from.getCategoryName()
-
         );
     }
 }

@@ -7,6 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductDtoConverter {
 
+    private final CategoryDtoConverter categoryDtoConverter;
+
+    public ProductDtoConverter(CategoryDtoConverter categoryDtoConverter) {
+        this.categoryDtoConverter = categoryDtoConverter;
+    }
+
     public ProductDto convert(Product from){
         return new ProductDto(
                 from.getId(),
@@ -14,7 +20,9 @@ public class ProductDtoConverter {
                 from.getQuantityPerUnit(),
                 from.getUnitPrice(),
                 from.getUnitsInStock(),
-                from.getCategory()
-        );
+                categoryDtoConverter.convert(from.getCategory()).copy(
+                     from.getCategory().getCategoryId(),from.getCategory().getCategoryName()
+                )
+                );
     }
 }

@@ -30,14 +30,14 @@ public class ProductService {
     }
     public ProductDto createAccount(CreateProductRequest createProductRequest){
 
-       //Category category = categoryService.findCategoryById(createProductRequest.getCategory().getCategoryId());
+       Category category = categoryService.findCategoryById(createProductRequest.getCategoryDto().getCategoryId());
 
         Product product = new Product(
                 createProductRequest.getProductName(),
                 createProductRequest.getQuantityPerUnit(),
                 createProductRequest.getUnitPrice(),
                 createProductRequest.getUnitsInStock(),
-                createProductRequest.getCategory()
+                category
         );
 
         return productDtoConverter.convert(productRepository.save(product));
@@ -46,6 +46,10 @@ public class ProductService {
     public List<ProductDto> getAllProduct(){
         List<Product> products = productRepository.findAll();
         return products.stream().map(productDtoConverter::convert).collect(Collectors.toList());
+    }
+
+    public void deleteProduct(int id){
+        productRepository.deleteById(id);
     }
 
 }
