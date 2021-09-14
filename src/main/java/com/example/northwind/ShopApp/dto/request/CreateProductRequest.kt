@@ -14,8 +14,8 @@ data class CreateProductRequest (
         @field:NotNull(message = "Quantity of Product is not empty !!")
         val quantityPerUnit : String,
         @field:Min(0,message = "Unit Price is not less than 0")
-        val unitPrice : Short,
+        val unitPrice : Int,
         @field:Min(0,message = "Unit stock is not less than 0")
-        val unitsInStock : Short,
+        val unitsInStock : Int,
         val categoryDto: CategoryDto
 )

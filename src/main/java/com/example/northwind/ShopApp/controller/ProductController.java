@@ -31,15 +31,20 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> getById(@PathVariable int id){
         return  ResponseEntity.ok(productService.findCategoryId(id));
     }
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody CreateProductRequest productRequest){
         return ResponseEntity.ok(productService.createAccount(productRequest));
     }
-/*
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProductById(@PathVariable int id){
 
-        return ResponseEntity.ok(productService.deleteProduct(id));
+    @GetMapping(value="/unitPrice={unitPrice}")
+    public ResponseEntity<List<ProductDto>> getProductLessThanUnitPrice(@RequestParam int unitPrice){
+        return ResponseEntity.ok(productService.getProductLessThanUnitPrice(unitPrice));
     }
-*/
+/*
+    @DeleteMapping("/delete={id}")
+    public ResponseEntity deleteProductById(@PathVariable int id){
+
+        return ResponseEntity.ok(productService.deleteProductById(id));
+    }*/
+
 }

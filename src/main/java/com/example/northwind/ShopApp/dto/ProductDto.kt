@@ -5,7 +5,7 @@ data class ProductDto(
     val id : Int,
     val productName : String,
     val quantityPerUnit : String,
-    val unitPrice :Short,
-    val unitsInStock : Short,
+    val unitPrice :Int,
+    val unitsInStock : Int,
     val categoryDto : CategoryDto
 )

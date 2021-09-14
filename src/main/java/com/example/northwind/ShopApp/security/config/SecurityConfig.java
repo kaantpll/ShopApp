@@ -9,9 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import static com.example.northwind.ShopApp.security.ApplicationUserRole.ANY_USER;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @Configuration
@@ -19,12 +17,10 @@ import static com.example.northwind.ShopApp.security.ApplicationUserRole.ANY_USE
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final ApplicationUserService applicationUserService;
 
-
-    @Autowired
-    public SecurityConfig(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService) {
+    public SecurityConfig(BCryptPasswordEncoder passwordEncoder, ApplicationUserService applicationUserService) {
         this.passwordEncoder = passwordEncoder;
         this.applicationUserService = applicationUserService;
     }
@@ -33,17 +29,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
-        /*        .antMatchers("/v1/product/**").hasRole(ANY_USER.name())
-                .antMatchers("/manager/v1/product/**").hasRole(ANY_USER.name())*/
+                //.antMatchers("/v1/api/registration").permitAll()
                 .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic();
+                .authenticated().and()
+                .formLogin().disable();
+
+
     }
- /*** IN Memory*/
- /*
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider());
+    }
+
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setUserDetailsService(applicationUserService);
+        return provider;
+    }
+
+
+
+/*
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
@@ -65,17 +78,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         );
     }*/
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuthenticationProvider());
-    }
 
-    /** In My Database*/
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(applicationUserService);
-        return provider;
-    }
+
 }

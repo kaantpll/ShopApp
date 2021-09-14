@@ -1,42 +1,70 @@
 package com.example.northwind.ShopApp.auth;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.Collections;
 
+@Entity
+@Table(name="user")
 public class ApplicationUser implements UserDetails {
 
-    private final Set<? extends GrantedAuthority> grantedAuthorities;
-    private final String password;
-    private final String userName;
-    private final boolean isAccountNonExpired;
-    private final boolean isAccountNonLocked;
-    private final boolean isEnabled;
-    private final boolean isCredentialsNonExpired;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
 
-    public ApplicationUser(
-            Set<? extends GrantedAuthority> grantedAuthorities,
-            String password, String userName,
-            boolean isAccountNonExpired,
-            boolean isAccountNonLocked,
-            boolean isEnabled, boolean isCredentialsNonExpired)
-    {
-        this.grantedAuthorities = grantedAuthorities;
-        this.password = password;
-        this.userName = userName;
-        this.isAccountNonExpired = isAccountNonExpired;
-        this.isAccountNonLocked = isAccountNonLocked;
-        this.isEnabled = isEnabled;
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
+    @Column(name="username")
+    private String username;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private AppUserRole appUserRole;
+
+    @Column(name="locked")
+    private Boolean locked = false;
+
+    @Column(name = "enable")
+    private Boolean enabled = false;
+
+    public ApplicationUser() {
     }
 
+    public ApplicationUser( String username, String email, String password, AppUserRole appUserRole, Boolean locked, Boolean enabled) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.appUserRole = appUserRole;
+        this.locked = locked;
+        this.enabled = enabled;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        SimpleGrantedAuthority authority =
+                new SimpleGrantedAuthority(appUserRole.name());
+        return Collections.singletonList(authority);
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -46,26 +74,26 @@ public class ApplicationUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+        return !locked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return enabled;
     }
 }

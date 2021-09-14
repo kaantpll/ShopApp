@@ -4,7 +4,7 @@ import org.hibernate.annotations.Columns
 import javax.persistence.*
 
 @Entity
-@Table(name="users")
+@Table(name="usersbn")
 data class User(
 
     @Id

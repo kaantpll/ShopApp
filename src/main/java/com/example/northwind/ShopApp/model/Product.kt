@@ -19,10 +19,10 @@ data class Product (
     val quantityPerUnit : String,
 
     @Column(name = "unit_price")
-    val unitPrice :Short,
+    val unitPrice :Int,
 
     @Column(name = "units_in_stock")
-    val unitsInStock : Short,
+    val unitsInStock : Int,
 
     @ManyToOne()
     @JoinColumn(name="category_id")
@@ -31,7 +31,7 @@ data class Product (
 )
 {
 
-    constructor(productName: String,quantityPerUnit: String,unitPrice: Short,unitsInStock: Short,category: Category) : this(
+    constructor(productName: String,quantityPerUnit: String,unitPrice: Int,unitsInStock: Int,category: Category) : this(
         id=78,
         productName = productName,
         quantityPerUnit = quantityPerUnit,

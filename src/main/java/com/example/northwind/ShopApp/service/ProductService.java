@@ -47,9 +47,26 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
         return products.stream().map(productDtoConverter::convert).collect(Collectors.toList());
     }
+/*
+    public ProductDto getByProductName(String productName){
+        return productDtoConverter.convert(productRepository.getByProductName(productName));
+    }*/
+//
+//    public ProductDto updateProduct(){
+//        return new ProductDto();
+//    }
 
-    public void deleteProduct(int id){
+    public void deleteProductById(int id){
         productRepository.deleteById(id);
     }
+
+    public List<ProductDto> getProductLessThanUnitPrice(int price){
+        return productRepository.unitPriceLessThan(price)
+                .stream()
+                .map(productDtoConverter::convert)
+                .collect(Collectors.toList());
+    }
+
+
 
 }
